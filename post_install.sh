@@ -17,4 +17,6 @@ git clone "$GIT_URL" "$INSTALL_DIR"
 mv "${INSTALL_DIR}/data" /usr/local/etc/zigbee2mqtt
 
 sysrc -f /etc/rc.conf zigbee2mqtt_enable="YES"
+# Generate a new network encryption key on first run
+zigbee2mqttset advanced__network_key GENERATE
 service zigbee2mqtt start
