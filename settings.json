@@ -156,11 +156,25 @@
 			"default": true,
 			"requirerestart": true
 		},
+		"frontend__host": {
+			"type": "string",
+			"name": "Web UI Address",
+			"description": "Address for the web frontend to bind.",
+			"default": "0.0.0.0",
+			"requirerestart": true
+		},
 		"frontend__port": {
 			"type": "int",
 			"name": "Web UI Port",
 			"description": "Port for the Zigbee2MQTT web frontend",
 			"default": 8080,
+			"requirerestart": true
+		},
+		"frontend__auth_token": {
+			"type": "int",
+			"name": "Web UI Authentication Token",
+			"description": "Authentication token to secure access to the web frontend with.",
+			"default": null,
 			"requirerestart": true
 		}
 	}
