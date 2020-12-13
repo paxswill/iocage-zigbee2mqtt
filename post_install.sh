@@ -9,7 +9,7 @@ USER_NAME=zigbee2mqtt
 INSTALL_DIR=/opt/zigbee2mqtt
 
 
-pw useradd -u $USER_ID -n $USER_NAME -d /nonexistent -s nologin -w no
+pw useradd -u $USER_ID -n $USER_NAME -d /nonexistent -s /sbin/nologin -w no
 
 mkdir -p "$INSTALL_DIR"
 git clone "$GIT_URL" "$INSTALL_DIR"
