@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# PROVIDE: zigbee2mqtt
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+name="zigbee2mqtt"
+rcvar="${name}_enable"
+
+pidfile_child="/var/run/${name}.pid"
+pidfile="/var/run/${name}_daemon.pid"
+logfile="/var/log/${name}_daemon.log"
+
+: ${zigbee2mqtt_enable:="NO"}
+: ${zigbee2mqtt_user:="zigbee2mqtt"}
+: ${zigbee2mqtt_group:="zigbee2mqtt"}
+: ${zigbee2mqtt_data_dir:="/usr/local/etc/zigbee2mqtt"}
+
+load_rc_config ${name}
+
+command=/usr/sbin/daemon
+extra_commands=upgrade
+
+export ZIGBEE2MQTT_DATA=/usr/local/etc/zigbee2mqtt
+ZIGBEE2MQTT_DIR=/opt/zigbee2mqtt
+
+upgrade_cmd="${name}_upgrade"
+zigbee2mqtt_upgrade() {
+	run_rc_command stop 2>/dev/null; _rcstop_=$?
+	(cd "$ZIGBEE2MQTT_DIR" && /usr/local/bin/npm ci)
+	[ $? -eq 0 ] && [ ${_rcstop_} -eq 0 ] && run_rc_command start
+}
+
+start_precmd="${name}_prestart"
+zigbee2mqtt_prestart() {
+	NODE=/usr/local/bin/node
+
+	[ ! -e "${pidfile_child}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${pidfile_child}"
+	[ ! -e "${pidfile}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${pidfile}"
+	[ ! -e "${logfile}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${logfile}"
+
+	rc_flags="-f -o ${logfile} -P ${pidfile} -p ${pidfile_child} $NODE ${ZIGBEE2MQTT_DIR}/cli.js ${rc_flags}"
+}
+
+stop_postcmd="${name}_poststop"
+zigbee2mqtt_poststop() {
+	rm -f -- "${pidfile_child}"
+}
+
+run_rc_command "$1"
+
