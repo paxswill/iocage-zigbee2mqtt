@@ -1,21 +1,20 @@
 #!/bin/sh
 
-: ${quasselcore_data="/var/db/quasselcore"}
-: ${quasselcore_log="/var/log/quasselcore.log"}
-: ${quasselcore_listen="0.0.0.0,::"}
+set -e
 
-# Enable the service
-sysrc -f /etc/rc.conf quasselcore_args="--configdir=${quasselcore_data} --logfile=${quasselcore_log} --listen=${quasselcore_listen} --ssl-cert=${quasselcore_data}/quasselCert.pem --require-ssl"
-sysrc -f /etc/rc.conf quasselcore_enable="YES"
+GIT_URL="https://github.com/Koenkk/zigbee2mqtt.git"
+# Using the standard MQTT port, but reversed as this isn't an MQTT broker
+USER_ID=3881
+USER_NAME=zigbee2mqtt
+INSTALL_DIR=/opt/zigbee2mqtt
 
-# Make the default DB dir
-mkdir -p /var/db/quasselcore
-chown quasselcore:quasselcore /var/db/quasselcore
 
-# Gen the SSL key
-printf "\n\n\n\n\n\n\n\n\n\n" | /usr/local/etc/rc.d/quasselcore onekeygen 2>/dev/null >/dev/null
+pw useradd -n $USER_ID -u $USER_NAME -d /nonexistent -s nologin -w no
 
-# Start the service
-if $(service quasselcore start 2>/dev/null >/dev/null) ; then
-    echo "Starting quasselcore."
-fi
+mkdir -p "$INSTALL_DIR"
+git clone "$GIT_URL" "$INSTALL_DIR"
+(cd "$INSTALL_DIR" && npm ci --production)
+mv "${INSTALL_DIR}/data" /usr/local/etc/zigbee2mqtt
+
+sysrc -f /etc/rc.conf zigbee2mqtt_enable="YES"
+service zigbee2mqtt start
