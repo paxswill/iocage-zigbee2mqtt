@@ -4,7 +4,8 @@ import pathlib
 import sys
 import typing
 
-import yaml
+from ruamel.yaml import YAML
+yaml = YAML(typ="rt")
 
 if typing.TYPE_CHECKING:
     import os
@@ -61,9 +62,6 @@ class Zigbee2MqttConfig:
             value_parent[key] = value
         # Write the new config to disk
         with self.config_path.open("w") as config_file:
-            config_file.write(
-                "# DO NOT PUT COMMENTS IN THIS FILE, THEY WILL BE DELETED!\n\n"
-            )
             yaml.dump((self._config, config_file)
 
     @classmethod
