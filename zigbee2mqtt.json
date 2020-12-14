@@ -21,8 +21,6 @@
     "ca_root_nss",
     "curl",
     "git",
-    "python37",
-    "py37-ruamel.yaml",
     "node",
     "npm"
   ],
