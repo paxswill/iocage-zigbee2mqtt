@@ -1,120 +1,57 @@
-# Iocage Plugin Artifact Template
+# iocage-zigbee2mqtt
 
-This is an example of what a typical plugin "artifact" git repo will contain.
+This is an [iocage][iocage] plugin for running [zigbee2mqtt][z2m] on TrueNAS
+Core.
 
-Artifacts are where 3rd party scripts and settings are stored for a particular plugin.
+[iocage]: https://github.com/iocage/iocage
+[z2m]: https://www.zigbee2mqtt.io/
 
-They allow you do run Post Install actions, which are often required to enable
-specific services or perform other post package setup.
+## Requirements
 
-# File Documentation
+* An MQTT broker is required. I use another iocage plugin for
+  [Mosquitto][iocage-mqtt].
+* You will also need a [supported Zigbee adapter][z2m-coordinators].
+* And finally, at least one [supported Zigbee device][z2m-devices].
 
- - `post_install.sh`
+[iocage-mqtt]: https://github.com/tprelog/iocage-mosquitto
+[z2m-coordinators]: https://www.zigbee2mqtt.io/information/supported_adapters.html
+[z2m-devices]: https://www.zigbee2mqtt.io/information/supported_devices.html
 
-This script is run *inside* the jail after it has been created and packages installed.
+## Installation
 
-Typically you will enable services in /etc/rc.conf that need to start with the jail startup,
-apply configuration settings, etc.
+At some point in the future, this plugin should be available as a Community
+Plugin.
 
+As an alternative, the following command will install from this repository
+directly:
 
- - `ui.json`
-
-Json file that accepts the following key/value options:
-
-- `adminportal : "http://%%IP%%/"`
-
-Plugin's web-interface for control / configuration. %%IP%% will be replaced dynamically withe the jails IP address.
-
- - `overlay/`
-
-Directory of files that will be copied on top of the jail post-install. I.E. usr/local/bin/myfile will
-be placed in the jails /usr/local/bin/myfile location. Can be used to supply custom files / configuration
-data, scripts and more.
-
- - `settings.json`
-
-JSON file which controls plugins settings interface (Both iocage CLI and GUI of TrueOS / FreeNAS)
-
-The required fields include:
-
-- `"servicerestart" : "service plexmediaserver restart"`
-
-  Command to run when restarting service after changing settings
-
-- `"serviceget" : "/usr/local/bin/myget"`
-
-  Points to the command used to get values for plugin configuration. Usually will be provided by the plugin creator, can be any language as long as it takes a single "key" argument, and returns the setting text.
-
-- `"serviceset" : "/usr/local/bin/myset"`
-
-  Points to the command used to set values for plugin configuration. Will be provided by the plugin creator, can be any language as long as it accepts two arguments for key/value pair.
-
-- `"options": { }`
-
-  The following subsection will contain arrays of elements, starting with the "key" name and required arguments
-for that particular type of setting. Example:
-
-
+```shell
+iocage fetch -P zigbee2mqtt -g https://github.com/paxswill/iocage-zigbee2mqtt --branch 12.1-RELEASE --name zigbee2mqtt
 ```
-"options": {
-		"adduser": {
-			"type": "add",
-			"name": "Add User",
-			"description": "Add new quasselcore user",
-			"requiredargs": {
-				"username": {
-					"type": "string",
-					"description": "Quassel Client Username"
-				},
-				"password": {
-					"type": "password",
-					"description": "Quassel Client Password"
-				},
-				"fullname": {
-					"type": "string",
-					"description": "Quassel Client Full Name"
-				}
-			},
-			"optionalargs": {
-				"adminuser": { 
-					"type": "bool",
-					"description": "Can this user administrate quasselcore?"
-				}
-			}
-		},
-		"port": {
-			"type": "int",
-			"name": "Quassel Core Port",
-			"description": "Port for incoming quassel connections",
-			"range": "1024-32000",
-			"default": "4242",
-			"requirerestart": true
-		},
-		"sslmode": {
-			"type": "bool",
-			"name": "SSL Only",
-			"description": "Only accept SSL connections",
-			"default": true,
-			"requirerestart": true
-			
-		},	
-		"ssloption": {
-			"type": "combo",
-			"name": "SSL Options",
-			"description": "SSL Connection Options",
-			"requirerestart": true,
-			"default": "tlsallow",
-			"options": {
-					"tlsrequire": "Require TLS",
-					"tlsallow": "Allow TLS",
-					"tlsdisable": "Disable TLS"
-			}
-		},
-		"deluser": {
-			"type": "delete",
-			"name": "Delete User",
-			"description": "Remove a quasselcore user"
-		}
 
-}
-```
+The name can be modified as needed, and other properties (like setting VNET
+interfaces with `interfaces="vnet0:bridge0"`) can be added at the end.
+
+## Configuration
+
+The data directory is located at `/usr/local/etc/zigbee2mqtt` within the jail.
+After installation, it is recommended that you edit
+`/usr/local/etc/zigbee2mqtt/configuration.yaml` with the name of the serial
+port your Zigbee adapter is available at (the default configuration assumes
+`/dev/cuaU0`). Home Assistant integration is also disabled by default, so be
+sure to enable that if you plan to use that. Device and group specific
+configuration is split into `devices.yaml` and `groups.yaml` by default. For
+full configuration details see the [zigbee2mqtt documentation][z2m-config]
+
+[z2m-config]: https://www.zigbee2mqtt.io/information/configuration.html
+
+A default secure configuration is installed, with a new random network
+encryption key generated and saved the first time zigbee2mqtt starts up. Device
+pairing is also disabled by default, but can easily be temporarily enabled from
+the web UI.
+
+## Usage
+
+A web interface is available on port 8080 (and can also be accessed by clicking
+the "Manage" button in the TrueNAS plugin UI).
+
