@@ -1,0 +1,17 @@
+homeassistant: false
+permit_join: false
+mqtt:
+  base_topic: zigbee2mqtt
+  server: 'mqtt://localhost'
+serial:
+  port: /dev/cuaU0
+advanced:
+  network_key: GENERATE
+  log_output:
+    - console
+frontend:
+  port: 8080
+experimental:
+  new_api: true
+devices: devices.yaml
+groups: groups.yaml

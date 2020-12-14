@@ -20,10 +20,7 @@ pw useradd \
 mkdir -p "$INSTALL_DIR"
 git clone "$GIT_URL" "$INSTALL_DIR"
 (cd "$INSTALL_DIR" && npm ci --production)
-mv "${INSTALL_DIR}/data" /usr/local/etc/zigbee2mqtt
 chown -R zigbee2mqtt /usr/local/etc/zigbee2mqtt
 
 sysrc -f /etc/rc.conf zigbee2mqtt_enable="YES"
-# Generate a new network encryption key on first run
-#zigbee2mqttset advanced__network_key GENERATE
 service zigbee2mqtt start
