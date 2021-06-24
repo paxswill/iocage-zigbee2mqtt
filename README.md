@@ -41,7 +41,7 @@ port your Zigbee adapter is available at (the default configuration assumes
 `/dev/cuaU0`). Home Assistant integration is also disabled by default, so be
 sure to enable that if you plan to use that. Device and group specific
 configuration is split into `devices.yaml` and `groups.yaml` by default. For
-full configuration details see the [zigbee2mqtt documentation][z2m-config]
+full configuration details see the [zigbee2mqtt documentation][z2m-config].
 
 [z2m-config]: https://www.zigbee2mqtt.io/information/configuration.html
 
@@ -55,3 +55,7 @@ the web UI.
 A web interface is available on port 8080 (and can also be accessed by clicking
 the "Manage" button in the TrueNAS plugin UI).
 
+## Troubleshooting
+
+Logs are saved to `/var/log/zigbee2mqtt_daemon.log` within the jail. They have
+embedded color sequences, so using `less -R` can make them pretty again.
