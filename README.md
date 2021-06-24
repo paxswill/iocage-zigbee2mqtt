@@ -57,5 +57,12 @@ the "Manage" button in the TrueNAS plugin UI).
 
 ## Troubleshooting
 
-Logs are saved to `/var/log/zigbee2mqtt_daemon.log` within the jail. They have
-embedded color sequences, so using `less -R` can make them pretty again.
+* Logs are saved to `/var/log/zigbee2mqtt_daemon.log` within the jail. They have
+  embedded color sequences, so using `less -R` can make them pretty again.
+* If your configuration disappears on upgrade (a bug in earlier versions of this
+  plugin), you can roll back to your pre-upgrade snapshot that iocage makes for
+  you. Use `iocage snaplist zigbee2mqtt` (replacing `zigbee2mqtt` with the name
+  of your jail) to list the available snapshots. Then use `iocage rollback -n
+  SNAPSHOT_NAME zigbee2mqtt` to rollback the changes (replace `SNAPSHOT_NAME`
+  with the name of a snapshot from the snapshot list, and change `zigbee2mqtt`
+  as needed again).

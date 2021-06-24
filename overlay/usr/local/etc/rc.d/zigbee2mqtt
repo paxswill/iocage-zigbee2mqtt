@@ -36,6 +36,12 @@ start_precmd="${name}_prestart"
 zigbee2mqtt_prestart() {
 	NODE=/usr/local/bin/node
 
+	# Ensure default config files are present
+	for F in configuration devices groups; do
+		if [ ! -e "${zigbee2mqtt_data_dir}/${F}.yaml" ]; then
+			install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -m 0640"${zigbee2mqtt_data_dir}/${F}.yaml.default" "${zigbee2mqtt_data_dir}/${F}.yaml"
+		fi
+	done
 	# Ensure that the zigbee2mqtt process can write to its config file if it
 	# has "GENERATE" in it.
 	if grep -qsF GENERATE "${zigbee2mqtt_data_dir}/configuration.yaml"; then
