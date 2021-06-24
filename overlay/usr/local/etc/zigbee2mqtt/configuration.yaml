@@ -6,6 +6,11 @@ mqtt:
 serial:
   port: /dev/cuaU0
 advanced:
+  # If the string 'generate' (but all uppercase) is present, the rc script will
+  # force the file permissions of this file to be writeable by the zigbee2mqtt
+  # user. If you don't want this to happen, you need to fully remove that string
+  # from this file.
+  # Fixes root cause of https://github.com/paxswill/iocage-zigbee2mqtt/issues/2
   network_key: GENERATE
   log_output:
     - console
