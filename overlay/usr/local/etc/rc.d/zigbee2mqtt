@@ -22,7 +22,7 @@ load_rc_config ${name}
 command=/usr/sbin/daemon
 extra_commands=upgrade
 
-export ZIGBEE2MQTT_DATA=/usr/local/etc/zigbee2mqtt
+export ZIGBEE2MQTT_DATA="${zigbee2mqtt_data_dir}"
 ZIGBEE2MQTT_DIR=/opt/zigbee2mqtt
 
 upgrade_cmd="${name}_upgrade"
