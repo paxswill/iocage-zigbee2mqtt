@@ -47,7 +47,7 @@ zigbee2mqtt_prestart() {
 	# Ensure there's a place to log files
 	[ ! -e "${logfile}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${logfile}"
 
-	rc_flags="-f -o ${logfile} -P ${pidfile} -p ${pidfile_child} $NODE ${ZIGBEE2MQTT_DIR}/cli.js ${rc_flags}"
+	rc_flags="-r -f -o ${logfile} -P ${pidfile} -p ${pidfile_child} $NODE ${ZIGBEE2MQTT_DIR}/cli.js ${rc_flags}"
 }
 
 stop_postcmd="${name}_poststop"
