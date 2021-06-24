@@ -38,9 +38,9 @@ zigbee2mqtt_prestart() {
 
 	# Ensure that the zigbee2mqtt process can write to its config file if it
 	# has "GENERATE" in it.
-	if grep -qsF GENERATE "${zigbee2mqtt_data_dir}/configuration.yaml"; then {
+	if grep -qsF GENERATE "${zigbee2mqtt_data_dir}/configuration.yaml"; then
 		chown ${zigbee2mqtt_user} "${zigbee2mqtt_data_dir}/configuration.yaml"
-	}
+	fi
 	# Create various PID files used by daemon(8)
 	[ ! -e "${pidfile_child}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${pidfile_child}"
 	[ ! -e "${pidfile}" ] && install -g "${zigbee2mqtt_group}" -o "${zigbee2mqtt_user}" -- /dev/null "${pidfile}"
