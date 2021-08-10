@@ -55,6 +55,12 @@ the web UI.
 A web interface is available on port 8080 (and can also be accessed by clicking
 the "Manage" button in the TrueNAS plugin UI).
 
+## Upgrading
+
+From within the jail, run `service zigbee2mqtt upgrade`. It should stop the
+jail, pull down and build the latest version of the zigbee2mqtt repository, and
+restart itself if everything succeeded.
+
 ## Troubleshooting
 
 * Logs are saved to `/var/log/zigbee2mqtt_daemon.log` within the jail. They have
