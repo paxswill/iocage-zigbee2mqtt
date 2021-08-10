@@ -19,7 +19,7 @@ pw useradd \
 
 mkdir -p "$INSTALL_DIR"
 git clone "$GIT_URL" "$INSTALL_DIR"
-(cd "$INSTALL_DIR" && npm ci --production)
+(cd "$INSTALL_DIR" && npm ci --production && npm run build)
 chown -R zigbee2mqtt /usr/local/etc/zigbee2mqtt
 
 sysrc -f /etc/rc.conf zigbee2mqtt_enable="YES"
