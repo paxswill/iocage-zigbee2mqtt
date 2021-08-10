@@ -28,7 +28,11 @@ ZIGBEE2MQTT_DIR=/opt/zigbee2mqtt
 upgrade_cmd="${name}_upgrade"
 zigbee2mqtt_upgrade() {
 	run_rc_command stop 2>/dev/null; _rcstop_=$?
-	(cd "$ZIGBEE2MQTT_DIR" && /usr/local/bin/npm ci)
+	(
+		cd "$ZIGBEE2MQTT_DIR" && \
+		/usr/local/bin/npm ci && \
+		/usr/local/bin/npm run build
+	)
 	[ $? -eq 0 ] && [ ${_rcstop_} -eq 0 ] && run_rc_command start
 }
 
