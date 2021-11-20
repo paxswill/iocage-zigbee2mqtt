@@ -20,9 +20,9 @@
   "pkgs": [
     "ca_root_nss",
     "curl",
-    "git",
-    "node",
-    "npm"
+    "git-lite",
+    "node14",
+    "npm-node14"
   ],
   "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
   "fingerprints": {
