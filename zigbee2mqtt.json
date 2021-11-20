@@ -1,6 +1,6 @@
 {
   "name": "zigbee2mqtt",
-  "release": "12.1-RELEASE",
+  "release": "12.2-RELEASE",
   "artifact": "https://github.com/paxswill/iocage-zigbee2mqtt.git",
   "official": "false",
   "devfs_ruleset": {
