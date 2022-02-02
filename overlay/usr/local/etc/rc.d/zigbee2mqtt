@@ -31,6 +31,7 @@ zigbee2mqtt_upgrade() {
 	(
 		PATH="${PATH}:/usr/local/bin";
 		cd "$ZIGBEE2MQTT_DIR" && \
+		/usr/local/bin/git pull && \
 		/usr/local/bin/npm ci && \
 		/usr/local/bin/npm run build
 	)
